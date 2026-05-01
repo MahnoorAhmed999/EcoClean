@@ -21,10 +21,16 @@
  */
 
 // ── Base URL ──────────────────────────────────────────────────
-// Points to your live Railway deployment.
-// NO trailing slash. NO /api suffix here — every path below
-// already starts with /api/... so it is appended there.
-const API_BASE_URL = 'https://ecoclean-production-62c7.up.railway.app';
+// Hardcoded Railway URL — the source of truth.
+// Never rely on an env variable for a frontend JS file because
+// Vercel strips the protocol and makes it a relative path.
+const _RAW_BASE = 'ecoclean-production-62c7.up.railway.app';
+
+// Always guarantee the https:// prefix, no trailing slash.
+const API_BASE_URL = 'https://' + _RAW_BASE.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+// Sanity check visible in DevTools console on every page load
+console.log('[EcoClean] Target API URL:', API_BASE_URL);
 
 // ── Token helpers ─────────────────────────────────────────────
 function getToken() {
@@ -42,7 +48,12 @@ function authHeaders() {
 // Every API call goes through here.
 // path must start with /api/  e.g. '/api/auth/login'
 async function apiFetch(path, opts = {}) {
+  // Double-check the final URL is absolute before fetching.
+  // If it ever starts with the Vercel hostname, something above broke.
   const url = API_BASE_URL + path;
+  if (!url.startsWith('https://')) {
+    throw new Error(`[EcoClean] Bad URL constructed: "${url}". API_BASE_URL must start with https://`);
+  }
 
   let res;
   try {
