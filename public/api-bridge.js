@@ -122,7 +122,7 @@ async function saveWorkers(d)  { window._tdCache.workers = d; }
  * Login — password sent to server exactly as typed.
  */
 async function apiLogin(email, password, role) {
-  const res = await apiFetch('/auth/login', {
+  const res = await apiFetch('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify({ email, password, role }),
   });
@@ -140,7 +140,7 @@ async function apiLogin(email, password, role) {
  * Register — password sent to server exactly as typed.
  */
 async function apiRegister(name, email, password, phone, address) {
-  const res = await apiFetch('/auth/register', {
+  const res = await apiFetch('/api/auth/register', {
     method: 'POST',
     body: JSON.stringify({ name, email, password, phone, address }),
   });
