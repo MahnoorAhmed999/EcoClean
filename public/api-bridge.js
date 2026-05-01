@@ -10,7 +10,7 @@
 
 //const API_BASE = 'http://localhost:3000/api';
 
-const API_BASE_URL = 'ecoclean-production-62c7.up.railway.app'
+const API_BASE_URL = 'ecoclean-production-62c7.up.railway.app' ;
 
 // This tells the app: "If I'm on Vercel, talk to Vercel. If I'm on my laptop, talk to my laptop."
 /*const API_BASE_URL = (window.location.hostname === 'localhost' || 
@@ -36,17 +36,15 @@ function authHeaders() {
 
 // ── Core HTTP wrapper ────────────────────────────────────────
 async function apiFetch(path, opts = {}) {
-  // Update API_BASE to API_BASE_URL below
-  const res  = await fetch(API_BASE_URL + path, { 
-    headers: authHeaders(), 
-    ...opts 
+  const res = await fetch(API_BASE_URL + path, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${sessionStorage.getItem('token') || ''}`
+    },
+    ...opts
   });
-
   const json = await res.json();
-  if (!res.ok) {
-    const msg = json.message || json.errors?.[0]?.msg || `HTTP ${res.status}`;
-    throw new Error(msg);
-  }
+  if (!res.ok) throw new Error(json.message || 'Error');
   return json;
 }
 
@@ -120,20 +118,11 @@ async function saveWorkers(d)  { window._tdCache.workers = d; }
 
 /**
  * Login — password sent to server exactly as typed.
- */
-async function apiLogin(email, password, role) {
-  const res = await apiFetch('/api/auth/login', {
+ */async function apiLogin(email, password, role) {
+  return await apiFetch('/api/auth/login', {
     method: 'POST',
-    body: JSON.stringify({ email, password, role }),
+    body: JSON.stringify({ email, password, role })
   });
-  sessionStorage.setItem('td_token', res.token);
-  sessionStorage.setItem('td_auth', JSON.stringify({
-    role:   res.user.role,
-    userId: res.user.id,
-    email:  res.user.email,
-    name:   res.user.name,
-  }));
-  return res;
 }
 
 /**
