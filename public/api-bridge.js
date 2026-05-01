@@ -8,7 +8,19 @@
  *   <script src="api-bridge.js"></script>
  */
 
-const API_BASE = 'http://localhost:3000/api';
+//const API_BASE = 'http://localhost:3000/api';
+
+const API_BASE_URL = 'https://ecoclean-production-62c7.up.railway.app'
+
+// This tells the app: "If I'm on Vercel, talk to Vercel. If I'm on my laptop, talk to my laptop."
+/*const API_BASE_URL = (window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' || 
+                      window.location.hostname.startsWith('192.168.'))
+  ? `http://${window.location.hostname}:5000` 
+  : 'https://ecoclean-rosy.vercel.app';
+*/
+console.log("Current Hostname:", window.location.hostname);
+console.log("Target API URL:", API_BASE_URL);
 
 // ── Token helpers ────────────────────────────────────────────
 function getToken() {
@@ -24,7 +36,12 @@ function authHeaders() {
 
 // ── Core HTTP wrapper ────────────────────────────────────────
 async function apiFetch(path, opts = {}) {
-  const res  = await fetch(API_BASE + path, { headers: authHeaders(), ...opts });
+  // Update API_BASE to API_BASE_URL below
+  const res  = await fetch(API_BASE_URL + path, { 
+    headers: authHeaders(), 
+    ...opts 
+  });
+
   const json = await res.json();
   if (!res.ok) {
     const msg = json.message || json.errors?.[0]?.msg || `HTTP ${res.status}`;
