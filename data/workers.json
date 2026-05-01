@@ -1,0 +1,50 @@
+[
+  {
+    "id": "W-001",
+    "name": "Muhammad Akram",
+    "zone": "Satellite Town",
+    "phone": "+92-311-1234567",
+    "status": "Active",
+    "assignedBookings": 0
+  },
+  {
+    "id": "W-002",
+    "name": "Kashif Mahmood",
+    "zone": "Satellite Town",
+    "phone": "+92-322-2345678",
+    "status": "Active",
+    "assignedBookings": 0
+  },
+  {
+    "id": "W-003",
+    "name": "Tariq Hussain",
+    "zone": "Bahria Town",
+    "phone": "+92-333-3456789",
+    "status": "Active",
+    "assignedBookings": 0
+  },
+  {
+    "id": "W-004",
+    "name": "Imran Butt",
+    "zone": "Gulraiz Housing",
+    "phone": "+92-344-4567890",
+    "status": "Inactive",
+    "assignedBookings": 0
+  },
+  {
+    "id": "W-005",
+    "name": "Zubair Shah",
+    "zone": "Chaklala",
+    "phone": "+92-355-5678901",
+    "status": "Active",
+    "assignedBookings": 0
+  },
+  {
+    "id": "W-006",
+    "name": "Asif Raza",
+    "zone": "Pir Wadhai",
+    "phone": "+92-366-6789012",
+    "status": "Active",
+    "assignedBookings": 0
+  }
+]

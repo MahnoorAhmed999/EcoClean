@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — ECO CLEAN</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body { min-height: 100vh; display: flex; align-items: stretch; }
+
+    .auth-left {
+      flex: 1;
+      background: linear-gradient(145deg, #0F4C2A 0%, #16A34A 60%, #22c55e 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 60px 48px;
+      position: relative; overflow: hidden;
+    }
+    .auth-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .auth-left-inner { position: relative; max-width: 400px; text-align: center; }
+    .auth-brand { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 40px; }
+    .auth-brand-icon { width: 48px; height: 48px; background: rgba(255,255,255,.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.25); }
+    .auth-brand-icon svg { width: 26px; height: 26px; color: #fff; }
+    .auth-brand-name { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 800; color: #fff; }
+    .auth-left h2 { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 14px; line-height: 1.2; }
+    .auth-left p { color: rgba(255,255,255,.75); font-size: 15px; line-height: 1.7; margin-bottom: 36px; }
+    .auth-left-stats { display: flex; gap: 28px; }
+    .auth-stat { text-align: center; }
+    .auth-stat-v { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 800; color: #fff; }
+    .auth-stat-l { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+
+    .auth-right {
+      width: 480px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 48px 56px;
+      background: var(--surface);
+    }
+    .auth-form-wrap { width: 100%; max-width: 380px; }
+    .auth-right h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+    .auth-right .sub { color: var(--text-500); font-size: 14px; margin-bottom: 28px; }
+
+    .form-stack { display: flex; flex-direction: column; gap: 16px; }
+
+    .pw-wrap { position: relative; }
+    .pw-wrap .form-input { padding-right: 48px; }
+    .pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-300); padding: 4px; }
+    .pw-toggle:hover { color: var(--green); }
+    .pw-toggle svg { width: 18px; height: 18px; display: block; }
+
+    .auth-footer { text-align: center; margin-top: 22px; font-size: 14px; color: var(--text-500); }
+    .auth-footer a { color: var(--green); font-weight: 700; }
+
+    .demo-box {
+      background: var(--green-soft);
+      border: 1.5px dashed var(--green-mid);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+    .demo-box-title { font-size: 12px; font-weight: 800; color: var(--green-dark); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .demo-cred { font-size: 13px; color: var(--text-500); display: flex; gap: 6px; align-items: center; margin-top: 4px; }
+    .demo-cred strong { color: var(--text-700); }
+    .demo-cred button { background: none; border: none; color: var(--green); font-size: 11px; font-weight: 700; cursor: pointer; margin-left: auto; }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 4px 0; }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider span { font-size: 12px; color: var(--text-300); font-weight: 600; }
+
+    @media (max-width: 900px) {
+      .auth-left { display: none; }
+      .auth-right { width: 100%; padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-left">
+  <div class="auth-left-inner">
+    <div class="auth-brand">
+      <div class="auth-brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      </div>
+      <span class="auth-brand-name">ECO CLEAN</span>
+    </div>
+    <h2>Welcome back to a cleaner Rawalpindi</h2>
+    <p>Sign in to manage your waste pickups, track your history, and see your environmental impact.</p>
+    <div class="auth-left-stats">
+      <div class="auth-stat"><div class="auth-stat-v">12K+</div><div class="auth-stat-l">Users</div></div>
+      <div class="auth-stat"><div class="auth-stat-v">98%</div><div class="auth-stat-l">On-time</div></div>
+      <div class="auth-stat"><div class="auth-stat-v">5★</div><div class="auth-stat-l">Rating</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="auth-right">
+  <div class="auth-form-wrap">
+    <h1 class="font-display anim-1">Sign In</h1>
+    <p class="sub anim-2">Access your EcoClean account</p>
+
+    <!-- Role Toggle -->
+    <div class="role-toggle anim-2" id="roleToggle" style="margin-bottom:24px">
+      <button class="role-toggle-btn active" id="btnResident" onclick="setRole('resident')">👤 Resident</button>
+      <button class="role-toggle-btn" id="btnAdmin" onclick="setRole('admin')">🛡️ Admin</button>
+    </div>
+
+    <!-- Demo Box -->
+
+    <div class="demo-box anim-3">
+      <div class="demo-box-title">✨ Demo Credentials</div>
+      <div class="demo-cred"><strong>Admin:</strong> admin@waste.pk / admin123 <button onclick="fillAdmin()">Use</button></div>
+      <div class="demo-cred"><strong>Resident:</strong> ahmed@example.com / any password <button onclick="fillResident()">Use</button></div>
+    </div>
+
+    <div class="form-stack anim-4">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="loginEmail" placeholder="your@email.com"/>
+        <span class="form-error" id="emailErr">Please enter a valid email</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pw-wrap">
+          <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password"/>
+          <button class="pw-toggle" onclick="togglePw('loginPassword', this)" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <span class="form-error" id="pwErr">Password is required</span>
+      </div>
+
+      <div id="loginErr" class="form-error" style="display:none;background:var(--red-light);padding:10px 12px;border-radius:var(--radius-sm);margin-top:4px"></div>
+
+      <button class="btn btn-primary btn-full" onclick="handleLogin()" style="margin-top:4px;height:50px;border-radius:var(--radius-sm);font-size:15px">
+        Sign In
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="auth-footer anim-5">
+      Don't have an account? <a href="register.html">Register here</a>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="api-bridge.js">
+
+</script>
+<script>
+  let currentRole = 'resident';
+
+  function setRole(role) {
+    currentRole = role;
+    document.getElementById('btnResident').classList.toggle('active', role === 'resident');
+    document.getElementById('btnAdmin').classList.toggle('active', role === 'admin');
+  }
+
+  // Demo buttons ke liye functions
+  function fillAdmin() { 
+    setRole('admin'); 
+    document.getElementById('loginEmail').value = 'admin@waste.pk'; 
+    document.getElementById('loginPassword').value = 'admin123'; 
+  }
+  
+  function fillResident() { 
+    setRole('resident'); 
+    document.getElementById('loginEmail').value = 'ahmed@example.com'; 
+    document.getElementById('loginPassword').value = 'password123'; 
+  }
+
+  function togglePw(id, btn) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  // --- ASLI LOGIN LOGIC ---
+  async function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    
+    // Pehle purane errors hide karein
+    document.getElementById('loginErr').style.display = 'none';
+
+    if (!email || !password) {
+      showLoginErr("Please fill all fields.");
+      return;
+    }
+
+    try {
+      // Ye line api-bridge.js ke zariye Aiven Cloud ko call karegi
+      const res = await apiLogin(email, password, currentRole); 
+      
+      if (res.success) {
+        // Successful login ke baad redirect
+        window.location.href = (currentRole === 'admin') ? 'admin.html' : 'dashboard.html';
+      } else {
+        showLoginErr(res.message || "Invalid credentials");
+      }
+    } catch (err) {
+      // Agar backend band hai ya koi aur masla hai
+      showLoginErr("Server error. Please check if backend is running.");
+    }
+  }
+
+  function showLoginErr(msg) {
+    const el = document.getElementById('loginErr');
+    el.textContent = msg; 
+    el.style.display = 'block';
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+</script>
+</body>
+</html>

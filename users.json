@@ -1,0 +1,9 @@
+[
+  { "id": "U-001", "name": "Ahmed Hassan",  "email": "ahmed@example.com",  "password": "password123", "phone": "+92-300-1234567", "address": "Satellite Town, Rawalpindi", "totalBookings": 24, "rating": 4.8, "memberSince": "Jan 2025", "status": "Active"   },
+  { "id": "U-002", "name": "Sara Khan",     "email": "sara@example.com",   "password": "password123", "phone": "+92-301-2345678", "address": "Bahria Town, Rawalpindi",    "totalBookings": 15, "rating": 4.5, "memberSince": "Feb 2025", "status": "Active"   },
+  { "id": "U-003", "name": "Ali Raza",      "email": "ali@example.com",    "password": "password123", "phone": "+92-302-3456789", "address": "Gulraiz Housing, Rawalpindi","totalBookings": 3,  "rating": 4.2, "memberSince": "Mar 2025", "status": "Active"   },
+  { "id": "U-004", "name": "Fatima Malik",  "email": "fatima@example.com", "password": "password123", "phone": "+92-303-4567890", "address": "Chaklala, Rawalpindi",       "totalBookings": 12, "rating": 4.9, "memberSince": "Jan 2025", "status": "Active"   },
+  { "id": "U-005", "name": "Usman Tariq",   "email": "usman@example.com",  "password": "password123", "phone": "+92-304-5678901", "address": "Satellite Town, Rawalpindi", "totalBookings": 8,  "rating": 4.0, "memberSince": "Apr 2025", "status": "Active"   },
+  { "id": "U-006", "name": "Zara Iqbal",    "email": "zara@example.com",   "password": "password123", "phone": "+92-305-6789012", "address": "Pir Wadhai, Rawalpindi",     "totalBookings": 18, "rating": 4.7, "memberSince": "Jan 2025", "status": "Active"   },
+  { "id": "U-007", "name": "Hassan Mirza",  "email": "hassan@example.com", "password": "password123", "phone": "+92-306-7890123", "address": "Bahria Town, Rawalpindi",    "totalBookings": 6,  "rating": 3.8, "memberSince": "May 2025", "status": "Inactive" }
+]

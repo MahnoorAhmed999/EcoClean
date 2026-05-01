@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifications — EcoClean</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { display: flex; min-height: 100vh; background: var(--bg); }
+
+    /* ---- reuse dashboard sidebar styles ---- */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: linear-gradient(180deg, #0F2D1E 0%, #14532D 100%);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; height: 100vh;
+      z-index: 200; overflow-y: auto;
+    }
+    .sidebar-header { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .sb-brand { display: flex; align-items: center; gap: 10px; }
+    .sb-brand-icon { width: 38px; height: 38px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .sb-brand-icon svg { width: 20px; height: 20px; color: #fff; }
+    .sb-brand-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 800; color: #fff; }
+    .sb-brand-sub  { font-size: 10px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: 1px; }
+    .sb-user { padding: 20px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .sb-user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; color: #fff; margin-bottom: 10px; }
+    .sb-user-name  { font-weight: 700; color: #fff; font-size: 14px; }
+    .sb-user-email { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 2px; }
+    .sb-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+    .sb-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 9px;
+      color: rgba(255,255,255,.5); font-size: 14px; font-weight: 600;
+      transition: all .18s; text-decoration: none;
+    }
+    .sb-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .sb-link:hover { background: rgba(255,255,255,.07); color: #fff; }
+    .sb-link.active { background: var(--green); color: #fff; }
+    .sb-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,.07); }
+    .logout-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 9px 12px; border-radius: 9px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,.4); font-size: 14px; font-weight: 600;
+      font-family: inherit; transition: all .18s;
+    }
+    .logout-btn svg { width: 18px; height: 18px; }
+    .logout-btn:hover { background: rgba(239,68,68,.15); color: #fca5a5; }
+
+    /* ---- MAIN ---- */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+    .topbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 32px; height: 66px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 800; color: var(--text-900); }
+    .topbar-date  { font-size: 13px; color: var(--text-500); margin-top: 1px; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .topbar-tag   { display: flex; align-items: center; gap: 6px; background: var(--green-soft); color: var(--green-dark); padding: 7px 14px; border-radius: 100px; font-size: 13px; font-weight: 700; }
+    .topbar-tag svg { width: 14px; height: 14px; }
+
+    .content { padding: 32px; max-width: 760px; }
+
+    /* ---- NOTIF HEADER ---- */
+    .notif-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .notif-title-row { display: flex; align-items: center; gap: 10px; }
+    .notif-main-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 800; color: var(--text-900); }
+    .unread-count { background: var(--red); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 100px; }
+    .btn-mark-all {
+      background: none; border: 1.5px solid var(--border); color: var(--text-500);
+      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .18s;
+    }
+    .btn-mark-all:hover { border-color: var(--green); color: var(--green); }
+
+    /* ---- FILTER TABS ---- */
+    .filter-tabs { display: flex; gap: 4px; background: var(--green-soft); padding: 4px; border-radius: 10px; margin-bottom: 20px; width: fit-content; }
+    .ftab {
+      padding: 7px 16px; border-radius: 8px; border: none; background: none;
+      font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-500);
+      font-family: inherit; transition: all .2s;
+    }
+    .ftab.active { background: var(--surface); color: var(--text-900); box-shadow: var(--shadow-xs); }
+
+    /* ---- NOTIFICATION ITEMS ---- */
+    .notif-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .notif-item {
+      background: var(--surface); border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: all .18s;
+      position: relative;
+    }
+    .notif-item:hover { box-shadow: var(--shadow-sm); }
+    .notif-item.unread { background: #F0FDF4; border-color: var(--green-mid); }
+    .notif-item.unread::before {
+      content: ''; position: absolute; top: 18px; left: -1px;
+      width: 3px; height: calc(100% - 36px); background: var(--green);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .notif-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .notif-icon svg { width: 20px; height: 20px; }
+    .notif-icon.success { background: var(--green-light); }
+    .notif-icon.info    { background: var(--blue-light); }
+    .notif-icon.warning { background: var(--amber-light); }
+    .notif-icon.error   { background: var(--red-light); }
+
+    .notif-body { flex: 1; min-width: 0; }
+    .notif-top  { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+    .notif-type { font-weight: 800; font-size: 14px; color: var(--text-900); }
+    .notif-time { font-size: 11px; color: var(--text-300); white-space: nowrap; }
+    .notif-msg  { font-size: 13px; color: var(--text-500); line-height: 1.5; }
+    .notif-booking { display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; background: var(--green-soft); border: 1px solid var(--green-mid); color: var(--green-dark); padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+
+    .notif-actions { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+    .notif-action-btn {
+      background: none; border: none; cursor: pointer; font-size: 11px; font-weight: 600;
+      color: var(--text-300); padding: 4px 8px; border-radius: 6px; font-family: inherit;
+      transition: all .18s;
+    }
+    .notif-action-btn:hover { background: var(--green-soft); color: var(--green); }
+    .notif-action-btn.delete:hover { background: var(--red-light); color: var(--red); }
+
+    .new-badge { background: var(--green); color: #fff; font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 100px; }
+
+    /* ---- EMPTY ---- */
+    .notif-empty { text-align: center; padding: 60px 20px; }
+    .notif-empty-icon { width: 60px; height: 60px; background: var(--green-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+    .notif-empty-icon svg { width: 28px; height: 28px; color: var(--green); }
+    .notif-empty h3 { font-size: 16px; font-weight: 700; color: var(--text-700); margin-bottom: 6px; }
+    .notif-empty p { font-size: 13px; color: var(--text-300); }
+
+    @media (max-width:768px) {
+      .main { margin-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .content { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sb-brand">
+      <div class="sb-brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      </div>
+      <div>
+        <div class="sb-brand-name">EcoClean</div>
+        <div class="sb-brand-sub">Resident Portal</div>
+      </div>
+    </div>
+  </div>
+  <div class="sb-user">
+    <div class="sb-user-avatar" id="sbAvatar">U</div>
+    <div class="sb-user-name" id="sbName">Loading...</div>
+    <div class="sb-user-email" id="sbEmail">—</div>
+  </div>
+  <nav class="sb-nav">
+    <a href="dashboard.html" class="sb-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="dashboard.html" class="sb-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      My Bookings
+    </a>
+    <a href="notifications.html" class="sb-link active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+      Notifications
+    </a>
+    <a href="dashboard.html" class="sb-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+  </nav>
+  <div class="sb-footer">
+    <button class="logout-btn" onclick="logout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      Logout
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div>
+        <div class="topbar-title">Notifications</div>
+        <div class="topbar-date" id="pageDate"></div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Rawalpindi
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="notif-header">
+      <div class="notif-title-row">
+        <div class="notif-main-title">Notifications</div>
+        <span class="unread-count" id="unreadCount">2 new</span>
+      </div>
+      <button class="btn-mark-all" onclick="markAllRead()">Mark all as read</button>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+      <button class="ftab active" onclick="filterNotifs('all',this)">All (<span id="countAll">0</span>)</button>
+      <button class="ftab" onclick="filterNotifs('unread',this)">Unread (<span id="countUnread">0</span>)</button>
+      <button class="ftab" onclick="filterNotifs('booking',this)">Bookings</button>
+      <button class="ftab" onclick="filterNotifs('worker',this)">Workers</button>
+    </div>
+
+    <!-- Notification list -->
+    <div class="notif-list" id="notifList"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="admin-data.js"></script>
+<script>
+// ---- AUTH GUARD ----
+const auth = JSON.parse(sessionStorage.getItem('td_auth') || 'null');
+if (!auth || auth.role !== 'resident') window.location.href = 'login.html';
+
+const CURRENT_USER_ID = auth?.userId;
+
+// ---- GENERATE NOTIFICATIONS FROM BOOKINGS ----
+function buildNotifications() {
+  const userBookings = getBookings().filter(b => b.userId === CURRENT_USER_ID);
+  const workers = getWorkers();
+  const notifs = [];
+
+  userBookings.forEach(b => {
+    const worker = b.workerId ? (workers.find(w => w.id === b.workerId)?.name || 'A worker') : null;
+
+    if (b.status === 'Completed') {
+      notifs.push({
+        id: 'n-done-' + b.id,
+        type: 'success',
+        icon: 'check',
+        title: 'Collection Completed',
+        msg: `Your waste collection for ${b.wasteType} waste has been completed successfully.`,
+        booking: b.id,
+        time: '2h ago',
+        read: true,
+        filter: 'booking',
+      });
+    }
+    if (b.workerId && b.status === 'Assigned') {
+      notifs.push({
+        id: 'n-worker-' + b.id,
+        type: 'info',
+        icon: 'worker',
+        title: 'Worker Assigned',
+        msg: `${worker} has been assigned to your ${b.wasteType} pickup scheduled for ${formatDate(b.date)}.`,
+        booking: b.id,
+        time: '21h ago',
+        read: false,
+        filter: 'worker',
+      });
+    }
+    if (b.status === 'Pending' || b.status === 'Assigned') {
+      notifs.push({
+        id: 'n-reminder-' + b.id,
+        type: 'warning',
+        icon: 'bell',
+        title: 'Upcoming Collection',
+        msg: `Reminder: You have a ${b.wasteType} collection scheduled for ${formatDate(b.date)} at ${b.timeSlot}.`,
+        booking: b.id,
+        time: 'Yesterday',
+        read: false,
+        filter: 'booking',
+      });
+    }
+    if (b.status === 'Cancelled') {
+      notifs.push({
+        id: 'n-cancel-' + b.id,
+        type: 'error',
+        icon: 'x',
+        title: 'Booking Cancelled',
+        msg: `Your booking ${b.id} for ${b.wasteType} waste on ${formatDate(b.date)} was cancelled.`,
+        booking: b.id,
+        time: '3d ago',
+        read: true,
+        filter: 'booking',
+      });
+    }
+  });
+
+  // Sort: unread first then by recency-ish
+  notifs.sort((a,b) => a.read - b.read);
+  return notifs;
+}
+
+let notifications = [];
+let currentFilter = 'all';
+let readSet = new Set();
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pageDate').textContent =
+    new Date().toLocaleDateString('en-PK', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  const user = getUsers().find(u => u.id === CURRENT_USER_ID);
+  if (user) {
+    document.getElementById('sbAvatar').textContent = user.name.charAt(0);
+    document.getElementById('sbName').textContent   = user.name;
+    document.getElementById('sbEmail').textContent  = user.email;
+  }
+
+  notifications = buildNotifications();
+  updateCounts();
+  renderNotifs();
+});
+
+function updateCounts() {
+  const unread = notifications.filter(n => !n.read && !readSet.has(n.id));
+  document.getElementById('countAll').textContent    = notifications.length;
+  document.getElementById('countUnread').textContent = unread.length;
+  document.getElementById('unreadCount').textContent = unread.length
+    ? unread.length + ' new'
+    : 'All read';
+  document.getElementById('unreadCount').style.background = unread.length ? 'var(--red)' : 'var(--green)';
+}
+
+function renderNotifs() {
+  const el = document.getElementById('notifList');
+  let list = notifications;
+  if (currentFilter === 'unread')  list = list.filter(n => !n.read && !readSet.has(n.id));
+  if (currentFilter === 'booking') list = list.filter(n => n.filter === 'booking');
+  if (currentFilter === 'worker')  list = list.filter(n => n.filter === 'worker');
+
+  if (!list.length) {
+    el.innerHTML = `<div class="notif-empty">
+      <div class="notif-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+      <h3>No notifications here</h3><p>You're all caught up!</p>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(n => {
+    const isRead = n.read || readSet.has(n.id);
+    return `
+      <div class="notif-item ${isRead ? '' : 'unread'}" id="notif-${n.id}">
+        <div class="notif-icon ${n.type}">${iconHtml(n.icon)}</div>
+        <div class="notif-body">
+          <div class="notif-top">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="notif-type">${n.title}</span>
+              ${!isRead ? '<span class="new-badge">New</span>' : ''}
+            </div>
+            <span class="notif-time">${n.time}</span>
+          </div>
+          <div class="notif-msg">${n.msg}</div>
+          ${n.booking ? `<div class="notif-booking">📋 ${n.booking}</div>` : ''}
+          <div class="notif-actions">
+            ${!isRead ? `<button class="notif-action-btn" onclick="markRead('${n.id}')">Mark as read</button>` : ''}
+            <button class="notif-action-btn delete" onclick="deleteNotif('${n.id}')">Delete</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function markRead(id) {
+  readSet.add(id);
+  updateCounts();
+  renderNotifs();
+  showToast('Marked as read', 'success');
+}
+
+function markAllRead() {
+  notifications.forEach(n => readSet.add(n.id));
+  updateCounts();
+  renderNotifs();
+  showToast('All notifications marked as read', 'success');
+}
+
+function deleteNotif(id) {
+  notifications = notifications.filter(n => n.id !== id);
+  updateCounts();
+  renderNotifs();
+  showToast('Notification deleted', 'success');
+}
+
+function filterNotifs(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderNotifs();
+}
+
+function logout() { sessionStorage.removeItem('td_auth'); window.location.href = 'login.html'; }
+
+// ---- HELPERS ----
+function formatDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-PK', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function iconHtml(type) {
+  const icons = {
+    check:  '<svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+    worker: '<svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
+    bell:   '<svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>',
+    x:      '<svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  };
+  return icons[type] || icons.bell;
+}
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show ' + type;
+  setTimeout(() => t.className = '', 3200);
+}
+</script>
+</body>
+</html>

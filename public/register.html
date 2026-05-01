@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account — ECO CLEAN</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body { min-height: 100vh; display: flex; align-items: stretch; }
+
+    .auth-left {
+      flex: 1;
+      background: linear-gradient(145deg, #0F4C2A 0%, #16A34A 60%, #22c55e 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 60px 48px;
+      position: relative; overflow: hidden;
+    }
+    .auth-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .auth-left-inner { position: relative; max-width: 400px; text-align: center; }
+    .auth-brand { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 40px; }
+    .auth-brand-icon { width: 48px; height: 48px; background: rgba(255,255,255,.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.25); }
+    .auth-brand-icon svg { width: 26px; height: 26px; color: #fff; }
+    .auth-brand-name { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 800; color: #fff; }
+    .auth-left h2 { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 14px; line-height: 1.2; }
+    .auth-left p { color: rgba(255,255,255,.75); font-size: 15px; line-height: 1.7; margin-bottom: 36px; }
+
+    .benefit-list { list-style: none; text-align: left; display: flex; flex-direction: column; gap: 14px; }
+    .benefit-item { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500; }
+    .benefit-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .benefit-icon svg { width: 16px; height: 16px; color: #86efac; }
+
+    .auth-right {
+      width: 520px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 48px 56px;
+      background: var(--surface);
+      overflow-y: auto;
+    }
+    .auth-form-wrap { width: 100%; max-width: 400px; }
+    .auth-right h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+    .auth-right .sub { color: var(--text-500); font-size: 14px; margin-bottom: 28px; }
+
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-stack { display: flex; flex-direction: column; gap: 14px; }
+
+    .pw-wrap { position: relative; }
+    .pw-wrap .form-input { padding-right: 48px; }
+    .pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-300); padding: 4px; }
+    .pw-toggle:hover { color: var(--green); }
+    .pw-toggle svg { width: 18px; height: 18px; display: block; }
+
+    .pw-strength { margin-top: 6px; }
+    .pw-strength-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; margin-bottom: 4px; }
+    .pw-strength-fill { height: 100%; border-radius: 2px; transition: width .3s, background .3s; width: 0%; }
+    .pw-strength-label { font-size: 11px; font-weight: 600; }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .terms { font-size: 12px; color: var(--text-300); line-height: 1.6; margin-top: 8px; }
+    .terms a { color: var(--green); }
+
+    .auth-footer { text-align: center; margin-top: 22px; font-size: 14px; color: var(--text-500); }
+    .auth-footer a { color: var(--green); font-weight: 700; }
+
+    @media (max-width: 900px) {
+      .auth-left { display: none; }
+      .auth-right { width: 100%; padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-left">
+  <div class="auth-left-inner">
+    <div class="auth-brand">
+      <div class="auth-brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+      </div>
+      <span class="auth-brand-name">ECO CLEAN</span>
+    </div>
+    <h2>Join thousands helping Rawalpindi stay clean</h2>
+    <p>Create your free account in 2 easy steps and start scheduling waste pickups today.</p>
+    <ul class="benefit-list">
+      <li class="benefit-item">
+        <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        Free to register, no subscription needed
+      </li>
+      <li class="benefit-item">
+        <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        One-time and recurring pickup scheduling
+      </li>
+      <li class="benefit-item">
+        <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        Track your environmental impact live
+      </li>
+      <li class="benefit-item">
+        <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        Earn Priority status with regular bookings
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="auth-right">
+  <div class="auth-form-wrap">
+    <!-- Step indicator -->
+    <div class="steps anim-1" id="stepIndicator">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-panel active" id="panel1">
+      <h1 class="font-display anim-1">Personal Info</h1>
+      <p class="sub anim-2">Step 1 of 2 — Tell us about yourself</p>
+      <div class="form-stack">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-input" id="regName" placeholder="Ahmed Hassan"/>
+            <span class="form-error" id="nameErr">Name is required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" class="form-input" id="regPhone" placeholder="+92-300-0000000"/>
+            <span class="form-error" id="phoneErr">Valid phone required</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input type="email" class="form-input" id="regEmail" placeholder="your@email.com"/>
+          <span class="form-error" id="emailErr">Enter a valid, unique email</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Zone / Address *</label>
+          <select class="form-select" id="regAddress">
+            <option value="">Select your area</option>
+            <option>Satellite Town, Rawalpindi</option>
+            <option>Bahria Town, Rawalpindi</option>
+            <option>Gulraiz Housing, Rawalpindi</option>
+            <option>Chaklala, Rawalpindi</option>
+            <option>Pir Wadhai, Rawalpindi</option>
+            <option>Saddar, Rawalpindi</option>
+            <option>Westridge, Rawalpindi</option>
+          </select>
+          <span class="form-error" id="addressErr">Please select your area</span>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="goStep2()" style="height:50px;border-radius:var(--radius-sm);font-size:15px;margin-top:4px">
+          Continue
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="auth-footer">Already have an account? <a href="login.html">Sign in</a></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-panel" id="panel2">
+      <h1 class="font-display anim-1">Set Password</h1>
+      <p class="sub anim-2">Step 2 of 2 — Secure your account</p>
+      <div class="form-stack">
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <div class="pw-wrap">
+            <input type="password" class="form-input" id="regPassword" placeholder="Min. 8 characters" oninput="checkStrength(this.value)"/>
+            <button class="pw-toggle" onclick="togglePw('regPassword')" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="pw-strength">
+            <div class="pw-strength-bar"><div class="pw-strength-fill" id="strengthFill"></div></div>
+            <span class="pw-strength-label" id="strengthLabel" style="color:var(--text-300)">Enter a password</span>
+          </div>
+          <span class="form-error" id="pwErr">Password must be at least 8 characters</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password *</label>
+          <div class="pw-wrap">
+            <input type="password" class="form-input" id="regConfirm" placeholder="Repeat your password"/>
+            <button class="pw-toggle" onclick="togglePw('regConfirm')" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="form-error" id="confirmErr">Passwords do not match</span>
+        </div>
+        <div class="terms">
+          By creating an account you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        </div>
+        <div style="display:flex;gap:10px;margin-top:4px">
+          <button class="btn btn-outline" onclick="goStep1()" style="height:50px;border-radius:var(--radius-sm)">← Back</button>
+          <button class="btn btn-primary" onclick="handleRegister()" style="flex:1;height:50px;border-radius:var(--radius-sm);font-size:15px">
+            Create Account 🎉
+          </button>
+        </div>
+      </div>
+      <div class="auth-footer">Already have an account? <a href="login.html">Sign in</a></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="api-bridge.js"></script>
+<script>
+  function goStep2() {
+    const name    = document.getElementById('regName').value.trim();
+    const phone   = document.getElementById('regPhone').value.trim();
+    const email   = document.getElementById('regEmail').value.trim();
+    const address = document.getElementById('regAddress').value;
+    let valid = true;
+
+    ['nameErr','phoneErr','emailErr','addressErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+    ['regName','regPhone','regEmail','regAddress'].forEach(id => document.getElementById(id).classList.remove('error'));
+
+    if (!name) { err('regName','nameErr'); valid = false; }
+    if (!phone || phone.length < 8) { err('regPhone','phoneErr'); valid = false; }
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { err('regEmail','emailErr'); valid = false; }
+    
+    
+    if (!address) { err('regAddress','addressErr'); valid = false; }
+    if (!valid) return;
+
+    // Advance to step 2
+    document.getElementById('panel1').classList.remove('active');
+    document.getElementById('panel2').classList.add('active');
+    document.getElementById('dot1').classList.remove('active'); document.getElementById('dot1').classList.add('done'); document.getElementById('dot1').innerHTML = '✓';
+    document.getElementById('line1').classList.add('done');
+    document.getElementById('dot2').classList.add('active');
+  }
+
+  function goStep1() {
+    document.getElementById('panel2').classList.remove('active');
+    document.getElementById('panel1').classList.add('active');
+    document.getElementById('dot1').classList.add('active'); document.getElementById('dot1').classList.remove('done'); document.getElementById('dot1').innerHTML = '1';
+    document.getElementById('line1').classList.remove('done');
+    document.getElementById('dot2').classList.remove('active');
+  }
+
+  async function handleRegister() {
+  const password = document.getElementById('regPassword').value;
+  const confirm  = document.getElementById('regConfirm').value;
+  let valid = true;
+
+  ['pwErr','confirmErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+  if (!password || password.length < 8) { err('regPassword','pwErr'); valid = false; }
+  if (password !== confirm)              { err('regConfirm','confirmErr'); valid = false; }
+  if (!valid) return;
+
+  const name    = document.getElementById('regName').value.trim();
+  const email   = document.getElementById('regEmail').value.trim();
+  const phone   = document.getElementById('regPhone').value.trim();
+  const address = document.getElementById('regAddress').value;
+
+  try {
+    const res = await apiRegister(name, email, password, phone, address);
+    if (res.success) {
+      showToast('Account created! Welcome to ECO CLEAN');
+      setTimeout(() => window.location.href = 'dashboard.html', 1200);
+    } else {
+      showToast(res.message || 'Registration failed', 'error');
+    }
+  } catch(e) {
+    showToast(e.message || 'Server error. Is the backend running?', 'error');
+  }
+}
+  function err(inputId, errId) {
+    document.getElementById(inputId).classList.add('error');
+    document.getElementById(errId).classList.add('show');
+  }
+
+  function togglePw(id) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  function checkStrength(val) {
+    const fill  = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    if (!val) { fill.style.width = '0%'; label.textContent = 'Enter a password'; label.style.color = 'var(--text-300)'; return; }
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const configs = [
+      { w:'25%', bg:'var(--red)',   t:'Too weak',  c:'var(--red)'   },
+      { w:'50%', bg:'var(--amber)', t:'Fair',       c:'var(--amber)' },
+      { w:'75%', bg:'#3B82F6',      t:'Good',       c:'#3B82F6'      },
+      { w:'100%',bg:'var(--green)', t:'Strong 💪',  c:'var(--green)' },
+    ];
+    const cfg = configs[score - 1] || configs[0];
+    fill.style.width = cfg.w; fill.style.background = cfg.bg;
+    label.textContent = cfg.t; label.style.color = cfg.c;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'show success';
+    setTimeout(() => t.className = '', 3000);
+  }
+</script>
+</body>
+</html>

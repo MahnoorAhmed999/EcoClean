@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ECO CLEAN Admin — Rawalpindi Waste Management</title>
+  <link rel="stylesheet" href="admin-style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+          <path d="M10 11v6M14 11v6"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">ECO CLEAN</span>
+        <span class="logo-sub">Admin Console</span>
+      </div>
+    </div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-section="overview" onclick="showSection('overview',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>Overview</span>
+    </a>
+    <a href="#" class="nav-item" data-section="bookings" onclick="showSection('bookings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+      <span>Manage Bookings</span>
+      <span class="nav-badge" id="pendingBadge">0</span>
+    </a>
+    <a href="#" class="nav-item" data-section="users" onclick="showSection('users',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      <span>User Registry</span>
+    </a>
+    <a href="#" class="nav-item" data-section="workers" onclick="showSection('workers',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M12 12v8M9 15l3-3 3 3"/></svg>
+      <span>Worker Management</span>
+    </a>
+    <a href="#" class="nav-item" data-section="analytics" onclick="showSection('analytics',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Analytics</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-chip">
+      <div class="admin-avatar">A</div>
+      <div class="admin-info">
+        <span class="admin-name">Admin</span>
+        <span class="admin-email">admin@waste.pk</span>
+      </div>
+    </div>
+    <a href="index.html" class="logout-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-wrap" id="mainWrap">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-title">
+        <h1 id="pageTitle">Overview</h1>
+        <span id="pageDate"></span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topbar-tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Rawalpindi
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="section active" id="sec-overview">
+
+    <div class="stat-grid">
+      <div class="stat-card" style="--accent:#10b981">
+        <div class="stat-icon" style="background:rgba(16,185,129,.12)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Registered Users</span>
+          <span class="stat-value" id="statUsers">0</span>
+          <span class="stat-trend up">↑ 3 this week</span>
+        </div>
+      </div>
+      <div class="stat-card" style="--accent:#3b82f6">
+        <div class="stat-icon" style="background:rgba(59,130,246,.12)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Active Workers</span>
+          <span class="stat-value" id="statWorkers">0</span>
+          <span class="stat-trend up">↑ 1 added</span>
+        </div>
+      </div>
+      <div class="stat-card" style="--accent:#f59e0b">
+        <div class="stat-icon" style="background:rgba(245,158,11,.12)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Pending Pickups</span>
+          <span class="stat-value" id="statPending">0</span>
+          <span class="stat-trend warn">Needs attention</span>
+        </div>
+      </div>
+      <div class="stat-card" style="--accent:#8b5cf6">
+        <div class="stat-icon" style="background:rgba(139,92,246,.12)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Pickups Today</span>
+          <span class="stat-value" id="statToday">0</span>
+          <span class="stat-trend up">On schedule</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Weekly Pickup Volume</h3>
+          <span class="chart-tag">Last 7 days</span>
+        </div>
+        <canvas id="weeklyChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Waste Type Distribution</h3>
+          <span class="chart-tag">All time</span>
+        </div>
+        <canvas id="wasteChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="overview-bottom">
+      <div class="quick-card">
+        <h3>Recent Bookings</h3>
+        <table class="mini-table" id="recentBookingsTable">
+          <thead><tr><th>ID</th><th>Resident</th><th>Type</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="quick-card">
+        <h3>Zone Load</h3>
+        <div class="zone-bars" id="zoneBars"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===================== BOOKINGS ===================== -->
+  <section class="section" id="sec-bookings">
+    <div class="section-toolbar">
+      <div class="filter-group">
+        <select id="filterStatus" onchange="renderBookings()">
+          <option value="">All Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="Assigned">Assigned</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <select id="filterZone" onchange="renderBookings()">
+          <option value="">All Zones</option>
+          <option>Satellite Town</option>
+          <option>Bahria Town</option>
+          <option>Gulraiz Housing</option>
+          <option>Chaklala</option>
+          <option>Pir Wadhai</option>
+        </select>
+        <select id="filterType" onchange="renderBookings()">
+          <option value="">All Types</option>
+          <option>Household</option>
+          <option>Recyclable</option>
+          <option>Organic</option>
+          <option>Electronic</option>
+          <option>Hazardous</option>
+        </select>
+        <input type="text" id="searchBookings" placeholder="Search resident…" oninput="renderBookings()">
+      </div>
+      <button class="btn-primary" onclick="exportBookings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Export CSV
+      </button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table" id="bookingsTable">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Resident</th>
+            <th>Zone</th>
+            <th>Waste Type</th>
+            <th>Date</th>
+            <th>Time Slot</th>
+            <th>Status</th>
+            <th>Assign Worker</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bookingsTbody"></tbody>
+      </table>
+    </div>
+    <div class="table-footer">
+      <span id="bookingCount">0 bookings</span>
+    </div>
+  </section>
+
+  <!-- ===================== USERS ===================== -->
+  <section class="section" id="sec-users">
+    <div class="section-toolbar">
+      <input type="text" id="searchUsers" placeholder="Search users…" oninput="renderUsers()" style="max-width:280px">
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn-outline" onclick="filterPriorityUsers()">⭐ Priority Only</button>
+        <button class="btn-primary" onclick="openAddUserModal()">+ Add User</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Phone</th><th>Address</th><th>Total Bookings</th><th>Rating</th><th>Member Since</th><th>Status</th></tr>
+        </thead>
+        <tbody id="usersTbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== WORKERS ===================== -->
+  <section class="section" id="sec-workers">
+    <div class="section-toolbar">
+      <input type="text" id="searchWorkers" placeholder="Search workers…" oninput="renderWorkers()" style="max-width:280px">
+      <button class="btn-primary" onclick="openAddWorkerModal()" style="margin-left:auto">+ Add Worker</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Worker ID</th><th>Name</th><th>Zone</th><th>Phone</th><th>Assigned Bookings</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="workersTbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== ANALYTICS ===================== -->
+  <section class="section" id="sec-analytics">
+    <div class="analytics-grid">
+      <div class="chart-card wide">
+        <div class="chart-header"><h3>Monthly Pickup Trend</h3><span class="chart-tag">2026</span></div>
+        <canvas id="monthlyChart" height="180"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header"><h3>Zone Activity</h3></div>
+        <canvas id="zoneChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header"><h3>Worker Performance</h3></div>
+        <canvas id="workerPerfChart" height="220"></canvas>
+      </div>
+    </div>
+    <div class="analytics-kpis" id="analyticsKpis"></div>
+  </section>
+
+</div>
+
+<!-- ======= MODALS ======= -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
+<!-- Add Worker Modal -->
+<div class="modal" id="addWorkerModal">
+  <div class="modal-header">
+    <h2>Add New Worker</h2>
+    <button onclick="closeModal()">×</button>
+  </div>
+  <div class="modal-body">
+    <label>Full Name<input type="text" id="wName" placeholder="Muhammad Akram"/></label>
+    <label>Worker ID<input type="text" id="wId" placeholder="W-005"/></label>
+    <label>Zone
+      <select id="wZone">
+        <option>Satellite Town</option>
+        <option>Bahria Town</option>
+        <option>Gulraiz Housing</option>
+        <option>Chaklala</option>
+        <option>Pir Wadhai</option>
+      </select>
+    </label>
+    <label>Phone<input type="text" id="wPhone" placeholder="+92-300-0000000"/></label>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn-primary" onclick="addWorker()">Add Worker</button>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal" id="addUserModal">
+  <div class="modal-header">
+    <h2>Add New Resident</h2>
+    <button onclick="closeModal()">×</button>
+  </div>
+  <div class="modal-body">
+    <label>Full Name<input type="text" id="uName" placeholder="Ahmed Hassan"/></label>
+    <label>Email<input type="email" id="uEmail" placeholder="user@example.com"/></label>
+    <label>Phone<input type="text" id="uPhone" placeholder="+92-300-0000000"/></label>
+    <label>Address
+      <select id="uAddress">
+        <option>Satellite Town, Rawalpindi</option>
+        <option>Bahria Town, Rawalpindi</option>
+        <option>Gulraiz Housing, Rawalpindi</option>
+        <option>Chaklala, Rawalpindi</option>
+        <option>Pir Wadhai, Rawalpindi</option>
+      </select>
+    </label>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn-primary" onclick="addUser()">Add User</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+
+<script src="api-bridge.js"></script>
+<script src="admin-app.js"></script>
+</body>
+</html>

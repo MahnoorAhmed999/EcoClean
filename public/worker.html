@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Worker Portal — ECO CLEAN</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { display: flex; min-height: 100vh; background: var(--bg); }
+
+    /* ---- SIDEBAR ---- */
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(180deg, #0F2D1E 0%, #14532D 100%);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; height: 100vh;
+      z-index: 200; overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 22px 18px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sb-icon { width: 36px; height: 36px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sb-icon svg { width: 18px; height: 18px; color: #fff; }
+    .sb-brand-name { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 800; color: #fff; }
+    .sb-brand-sub  { font-size: 9px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: 1px; }
+
+    .sb-worker { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .sb-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #fff; margin-bottom: 8px; }
+    .sb-wname  { font-weight: 700; color: #fff; font-size: 13px; }
+    .sb-zone   { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+    .sb-status { display: inline-flex; align-items: center; gap: 4px; background: rgba(16,185,129,.2); color: #34d399; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-top: 5px; }
+    .sb-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #34d399; }
+
+    .sb-nav { flex: 1; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; }
+    .sb-link {
+      display: flex; align-items: center; gap: 9px;
+      padding: 10px 12px; border-radius: 9px;
+      color: rgba(255,255,255,.5); font-size: 13px; font-weight: 600;
+      transition: all .18s; text-decoration: none; cursor: pointer; border: none; background: none; width: 100%; font-family: inherit;
+    }
+    .sb-link svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .sb-link:hover { background: rgba(255,255,255,.07); color: #fff; }
+    .sb-link.active { background: var(--green); color: #fff; }
+
+    .sb-footer { padding: 14px; border-top: 1px solid rgba(255,255,255,.07); }
+    .logout-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 9px 12px; border-radius: 9px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,.4); font-size: 13px; font-weight: 600;
+      font-family: inherit; transition: all .18s;
+    }
+    .logout-btn svg { width: 16px; height: 16px; }
+    .logout-btn:hover { background: rgba(239,68,68,.15); color: #fca5a5; }
+
+    /* ---- MAIN ---- */
+    .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
+
+    /* ---- TOPBAR ---- */
+    .topbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 28px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 800; color: var(--text-900); }
+    .topbar-date  { font-size: 12px; color: var(--text-500); margin-top: 1px; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .topbar-tag   { display: flex; align-items: center; gap: 6px; background: var(--green-soft); color: var(--green-dark); padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+    .topbar-tag svg { width: 13px; height: 13px; }
+
+    /* ---- CONTENT AREA ---- */
+    .content { padding: 28px; }
+
+    /* ---- TABS ---- */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ---- STAT CARDS ---- */
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+    .stat-box {
+      background: var(--surface); border-radius: 14px;
+      border: 1px solid var(--border); padding: 18px 20px;
+      box-shadow: var(--shadow-xs);
+    }
+    .stat-icon-w { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .stat-icon-w svg { width: 20px; height: 20px; }
+    .stat-val { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 800; color: var(--text-900); line-height: 1; }
+    .stat-lbl { font-size: 12px; color: var(--text-500); font-weight: 600; margin-top: 4px; }
+    .stat-sub { font-size: 11px; color: var(--green); font-weight: 600; margin-top: 3px; }
+
+    /* ---- SECTION HEADER ---- */
+    .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .sec-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 800; color: var(--text-900); }
+    .count-pill { background: var(--green-soft); color: var(--green-dark); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+
+    /* ---- ASSIGNMENT CARD ---- */
+    .assignment-list { display: flex; flex-direction: column; gap: 12px; }
+    .asgn-card {
+      background: var(--surface); border-radius: 14px;
+      border: 1px solid var(--border); box-shadow: var(--shadow-xs);
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .asgn-card:hover { box-shadow: var(--shadow-sm); }
+    .asgn-card.priority-card { border-left: 3px solid var(--amber); }
+
+    .asgn-header {
+      padding: 16px 20px 12px;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    }
+    .asgn-type { display: flex; align-items: center; gap: 10px; }
+    .asgn-type-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--green-soft); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .asgn-type-icon svg { width: 20px; height: 20px; }
+    .asgn-type-name { font-weight: 800; font-size: 15px; color: var(--text-900); }
+    .asgn-id { font-size: 11px; color: var(--text-300); font-family: monospace; margin-top: 1px; }
+    .asgn-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+    .asgn-body {
+      padding: 0 20px 14px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .asgn-detail-item { display: flex; align-items: flex-start; gap: 7px; }
+    .asgn-detail-item svg { width: 14px; height: 14px; color: var(--text-300); flex-shrink: 0; margin-top: 2px; }
+    .asgn-detail-label { font-size: 10px; color: var(--text-300); font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+    .asgn-detail-val { font-size: 13px; font-weight: 600; color: var(--text-700); margin-top: 1px; }
+
+    .asgn-notes {
+      margin: 0 20px 14px;
+      background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px;
+      padding: 10px 14px; font-size: 12px; color: #92400E;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .asgn-notes svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    .asgn-footer {
+      padding: 12px 20px; background: var(--green-soft);
+      border-top: 1px solid var(--green-mid);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .asgn-resident { font-size: 12px; color: var(--text-500); display: flex; align-items: center; gap: 6px; }
+    .asgn-resident svg { width: 13px; height: 13px; }
+    .asgn-actions { display: flex; gap: 8px; }
+
+    .btn-start {
+      background: var(--green); color: #fff; border: none; cursor: pointer;
+      padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700;
+      font-family: inherit; transition: background .18s; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-start svg { width: 14px; height: 14px; }
+    .btn-start:hover { background: var(--green-dark); }
+    .btn-complete {
+      background: #10b981; color: #fff; border: none; cursor: pointer;
+      padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700;
+      font-family: inherit; transition: background .18s; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-complete svg { width: 14px; height: 14px; }
+    .btn-complete:hover { background: #059669; }
+    .btn-contact {
+      background: var(--surface); color: var(--text-500); border: 1.5px solid var(--border);
+      cursor: pointer; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;
+      font-family: inherit; transition: all .18s; display: flex; align-items: center; gap: 5px;
+    }
+    .btn-contact svg { width: 14px; height: 14px; }
+    .btn-contact:hover { border-color: var(--green); color: var(--green); }
+
+    /* ---- EMPTY STATE ---- */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-300); }
+    .empty-state-icon { width: 64px; height: 64px; background: var(--green-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .empty-state-icon svg { width: 30px; height: 30px; color: var(--green); }
+    .empty-state h3 { font-size: 16px; font-weight: 700; color: var(--text-700); margin-bottom: 6px; }
+    .empty-state p { font-size: 13px; }
+
+    /* ---- PERFORMANCE SECTION ---- */
+    .perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .perf-card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); padding: 20px; box-shadow: var(--shadow-xs); }
+    .perf-card-title { font-weight: 700; font-size: 14px; color: var(--text-900); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .perf-card-title svg { width: 16px; height: 16px; color: var(--green); }
+
+    .perf-stat-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--green-soft); }
+    .perf-stat-row:last-child { border-bottom: none; }
+    .perf-stat-label { font-size: 13px; color: var(--text-500); font-weight: 500; }
+    .perf-stat-value { font-size: 14px; font-weight: 700; color: var(--text-900); }
+
+    .rating-stars { display: flex; align-items: center; gap: 3px; }
+    .star-fill { color: var(--amber); font-size: 16px; }
+    .star-empty { color: var(--border); font-size: 16px; }
+
+    /* ---- COMPLETED HISTORY ---- */
+    .hist-table-wrap { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--shadow-xs); overflow-x: auto; }
+    .hist-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .hist-table th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-300); background: var(--green-soft); }
+    .hist-table td { padding: 12px 16px; border-top: 1px solid var(--green-soft); vertical-align: middle; }
+    .hist-table tr:hover td { background: #FAFFFE; }
+
+    @media (max-width:900px) {
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .asgn-body { grid-template-columns: 1fr 1fr; }
+      .perf-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width:680px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sb-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+    </div>
+    <div>
+      <div class="sb-brand-name">ECO CLEAN</div>
+      <div class="sb-brand-sub">Worker Portal</div>
+    </div>
+  </div>
+
+  <div class="sb-worker">
+    <div class="sb-avatar" id="wAvatar">W</div>
+    <div class="sb-wname" id="wName">Loading...</div>
+    <div class="sb-zone" id="wZone">—</div>
+    <div class="sb-status">On Duty</div>
+  </div>
+
+  <nav class="sb-nav">
+    <button class="sb-link active" onclick="showTab('today', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      My Assignments
+    </button>
+    <button class="sb-link" onclick="showTab('performance', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Performance
+    </button>
+    <button class="sb-link" onclick="showTab('history', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      Completed
+    </button>
+  </nav>
+
+  <div class="sb-footer">
+    <button class="logout-btn" onclick="logout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      Logout
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <div>
+      <div class="topbar-title" id="pageTitle">My Assignments</div>
+      <div class="topbar-date" id="pageDate"></div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Keeping Rawalpindi Clean
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ======= TODAY / ASSIGNMENTS ======= -->
+    <div class="tab-panel active" id="tab-today">
+
+      <!-- Stats Row -->
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-icon-w" style="background:rgba(22,163,74,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="stat-val" id="statToday">0</div>
+          <div class="stat-lbl">Today's Tasks</div>
+          <div class="stat-sub" id="statTodayDone">0 completed</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon-w" style="background:rgba(139,92,246,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="stat-val" id="statTotal">0</div>
+          <div class="stat-lbl">Total Completed</div>
+          <div class="stat-sub">All time</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon-w" style="background:rgba(245,158,11,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="stat-val" id="statRating">—</div>
+          <div class="stat-lbl">Rating</div>
+          <div class="stat-sub">Average rating</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon-w" style="background:rgba(59,130,246,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          </div>
+          <div class="stat-val" id="statEfficiency">92%</div>
+          <div class="stat-lbl">Efficiency</div>
+          <div class="stat-sub">On-time rate</div>
+        </div>
+      </div>
+
+      <!-- Today's assignments -->
+      <div class="sec-header">
+        <div class="sec-title">Today's Collections</div>
+        <span class="count-pill" id="todayCount">0 tasks remaining</span>
+      </div>
+      <div class="assignment-list" id="todayList">
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3>All done for today!</h3>
+          <p>No active assignments. Great work! 🎉</p>
+        </div>
+      </div>
+
+      <!-- Upcoming -->
+      <div class="sec-header" style="margin-top:28px">
+        <div class="sec-title">Upcoming Assignments</div>
+        <span class="count-pill" id="upcomingCount">0</span>
+      </div>
+      <div class="assignment-list" id="upcomingList">
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <h3>No upcoming assignments</h3>
+          <p>New assignments will appear here.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======= PERFORMANCE ======= -->
+    <div class="tab-panel" id="tab-performance">
+      <div class="perf-grid">
+        <div class="perf-card">
+          <div class="perf-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Performance Summary
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Total Collections</span>
+            <span class="perf-stat-value" id="perfTotal">145</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">This Month</span>
+            <span class="perf-stat-value" id="perfMonth">18</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">On-time Rate</span>
+            <span class="perf-stat-value" style="color:var(--green)">92%</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Cancellations</span>
+            <span class="perf-stat-value" style="color:var(--red)">3</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Customer Rating</span>
+            <div class="rating-stars">
+              <span class="star-fill">★</span><span class="star-fill">★</span>
+              <span class="star-fill">★</span><span class="star-fill">★</span>
+              <span class="star-empty">★</span>
+              <span style="font-size:13px;font-weight:700;color:var(--amber);margin-left:4px" id="perfRating">4.7</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="perf-card">
+          <div class="perf-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Zone Coverage
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Primary Zone</span>
+            <span class="perf-stat-value" id="perfZone">—</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Assigned Bookings</span>
+            <span class="perf-stat-value" id="perfAssigned">0</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Priority Pickups</span>
+            <span class="perf-stat-value" style="color:var(--amber)">4</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Status</span>
+            <span class="badge badge-completed" id="perfStatus">Active</span>
+          </div>
+          <div class="perf-stat-row">
+            <span class="perf-stat-label">Worker ID</span>
+            <span class="perf-stat-value" style="font-family:monospace" id="perfId">—</span>
+          </div>
+        </div>
+
+        <div class="perf-card" style="grid-column: 1 / -1">
+          <div class="perf-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Performance Alerts
+          </div>
+          <div id="perfAlerts" style="display:flex;flex-direction:column;gap:10px">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= COMPLETED HISTORY ======= -->
+    <div class="tab-panel" id="tab-history">
+      <div class="sec-header" style="margin-bottom:16px">
+        <div class="sec-title">Completed Collections</div>
+        <span class="count-pill" id="histCount">0 total</span>
+      </div>
+      <div class="hist-table-wrap">
+        <table class="hist-table">
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Resident</th>
+              <th>Waste Type</th>
+              <th>Date</th>
+              <th>Time Slot</th>
+              <th>Zone</th>
+              <th>Rating</th>
+            </tr>
+          </thead>
+          <tbody id="histTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<div id="toast"></div>
+
+<script src="api-bridge.js"></script>
+<script>
+// ---- WORKER SELECTION (demo: pick from seeded workers) ----
+// In production this would come from the worker's own login session.
+// For demo, we use W-001 (Muhammad Akram) — can change via URL param ?worker=W-002
+const params     = new URLSearchParams(location.search);
+const WORKER_ID  = params.get('worker') || 'W-001';
+
+const TODAY = new Date().toISOString().slice(0,10);
+
+// ---- INIT ----
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pageDate').textContent =
+    new Date().toLocaleDateString('en-PK', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  loadWorkerInfo();
+  renderTodayTab();
+  renderHistoryTab();
+  renderPerformanceTab();
+});
+
+function loadWorkerInfo() {
+  const w = getWorkers().find(w => w.id === WORKER_ID);
+  if (!w) return;
+  document.getElementById('wAvatar').textContent = w.name.charAt(0);
+  document.getElementById('wName').textContent   = w.name;
+  document.getElementById('wZone').textContent   = w.zone;
+
+  // Stats
+  const myBookings = getBookings().filter(b => b.workerId === WORKER_ID);
+  const completed  = myBookings.filter(b => b.status === 'Completed');
+  const rated      = completed.filter(b => b.rating);
+  const avgRating  = rated.length ? (rated.reduce((s,b)=>s+b.rating,0)/rated.length).toFixed(1) : '—';
+
+  document.getElementById('statTotal').textContent    = completed.length;
+  document.getElementById('statRating').textContent   = avgRating !== '—' ? avgRating + ' ★' : '—';
+  document.getElementById('perfTotal').textContent    = completed.length;
+  document.getElementById('perfMonth').textContent    = completed.filter(b => b.date.startsWith('2026-04')).length || 18;
+  document.getElementById('perfRating').textContent   = avgRating;
+  document.getElementById('perfZone').textContent     = w.zone;
+  document.getElementById('perfAssigned').textContent = w.assignedBookings || 0;
+  document.getElementById('perfId').textContent       = w.id;
+  if (w.status !== 'Active') {
+    document.getElementById('perfStatus').textContent = w.status;
+    document.getElementById('perfStatus').className = 'badge badge-cancelled';
+  }
+}
+
+function renderTodayTab() {
+  const bookings = getBookings().filter(b => b.workerId === WORKER_ID);
+  const today    = bookings.filter(b => b.date === TODAY);
+  const upcoming = bookings.filter(b => b.date > TODAY && b.status === 'Assigned')
+                           .sort((a,b) => a.date.localeCompare(b.date));
+
+  const todayActive    = today.filter(b => b.status !== 'Completed' && b.status !== 'Cancelled');
+  const todayCompleted = today.filter(b => b.status === 'Completed');
+
+  document.getElementById('statToday').textContent    = today.length;
+  document.getElementById('statTodayDone').textContent = todayCompleted.length + ' completed';
+  document.getElementById('todayCount').textContent   = todayActive.length + ' tasks remaining';
+  document.getElementById('upcomingCount').textContent = upcoming.length;
+
+  renderAssignmentList('todayList', today.length ? today : [], true);
+  renderAssignmentList('upcomingList', upcoming, false);
+}
+
+function renderAssignmentList(containerId, bookings, isToday) {
+  const el = document.getElementById(containerId);
+  if (!bookings.length) return; // keep empty state
+  const users = getUsers();
+
+  el.innerHTML = bookings.map(b => {
+    const user    = users.find(u => u.id === b.userId);
+    const isPrio  = user && user.totalBookings >= 10;
+    const isDone  = b.status === 'Completed';
+    const phone   = user?.phone || '+92-300-0000000';
+
+    return `
+      <div class="asgn-card ${isPrio ? 'priority-card' : ''}" id="card-${b.id}">
+        <div class="asgn-header">
+          <div class="asgn-type">
+            <div class="asgn-type-icon">${wasteIcon(b.wasteType)}</div>
+            <div>
+              <div class="asgn-type-name">${b.wasteType}</div>
+              <div class="asgn-id">${b.id}</div>
+            </div>
+          </div>
+          <div class="asgn-badges">
+            ${isPrio ? '<span class="badge badge-priority">⭐ Priority</span>' : ''}
+            ${badgeHtml(b.status)}
+          </div>
+        </div>
+        <div class="asgn-body">
+          <div class="asgn-detail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <div class="asgn-detail-label">Location</div>
+              <div class="asgn-detail-val">${b.zone}</div>
+            </div>
+          </div>
+          <div class="asgn-detail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div>
+              <div class="asgn-detail-label">Time Slot</div>
+              <div class="asgn-detail-val">${b.timeSlot}</div>
+            </div>
+          </div>
+          <div class="asgn-detail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div>
+              <div class="asgn-detail-label">Date</div>
+              <div class="asgn-detail-val">${formatDate(b.date)}</div>
+            </div>
+          </div>
+        </div>
+        ${b.notes ? `
+        <div class="asgn-notes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Special Instructions: ${b.notes}
+        </div>` : ''}
+        <div class="asgn-footer">
+          <div class="asgn-resident">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            ${b.userName}
+          </div>
+          <div class="asgn-actions">
+            ${!isDone ? `
+              <button class="btn-contact" onclick="contactResident('${phone}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.45-.45a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                Contact
+              </button>
+              <button class="btn-complete" onclick="markComplete('${b.id}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Mark Complete
+              </button>
+            ` : `<span style="font-size:12px;color:var(--green);font-weight:700">✓ Completed</span>`}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function markComplete(bookingId) {
+  const bookings = getBookings();
+  const b = bookings.find(b => b.id === bookingId);
+  if (!b) return;
+  b.status = 'Completed';
+  b.rating = 5; // default rating for demo
+  saveBookings(bookings);
+
+  // Update worker's assigned count
+  const workers = getWorkers();
+  const w = workers.find(w => w.id === WORKER_ID);
+  if (w) { w.assignedBookings = Math.max(0, (w.assignedBookings||0) - 1); saveWorkers(workers); }
+
+  showToast(`Booking ${bookingId} marked as completed! ✓`, 'success');
+  renderTodayTab();
+  renderHistoryTab();
+  loadWorkerInfo();
+}
+
+function renderHistoryTab() {
+  const completed = getBookings().filter(b => b.workerId === WORKER_ID && b.status === 'Completed')
+                                 .sort((a,b) => b.date.localeCompare(a.date));
+  document.getElementById('histCount').textContent = completed.length + ' total';
+  const tbody = document.getElementById('histTbody');
+  if (!tbody) return;
+  tbody.innerHTML = completed.map(b => `
+    <tr>
+      <td style="font-family:monospace;font-size:11px;color:var(--text-300)">${b.id}</td>
+      <td style="font-weight:600">${b.userName}</td>
+      <td><span class="badge" style="background:var(--green-soft);color:var(--green-dark)">${b.wasteType}</span></td>
+      <td style="font-size:12px">${formatDate(b.date)}</td>
+      <td style="font-size:12px;color:var(--text-500)">${b.timeSlot}</td>
+      <td style="font-size:12px;color:var(--text-500)">${b.zone}</td>
+      <td>${b.rating ? '⭐'.repeat(b.rating) : '—'}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-300)">No completed collections yet</td></tr>';
+}
+
+function renderPerformanceTab() {
+  const alertsEl = document.getElementById('perfAlerts');
+  if (!alertsEl) return;
+  const w = getWorkers().find(w => w.id === WORKER_ID);
+  const alerts = [];
+  if (w && w.assignedBookings > 5) {
+    alerts.push({ type: 'warn', msg: 'High workload: ' + w.assignedBookings + ' active bookings assigned. Prioritise oldest first.' });
+  }
+  alerts.push({ type: 'info', msg: 'Priority user bookings in your zone are flagged with ⭐ — handle these first during high-demand periods.' });
+  alerts.push({ type: 'success', msg: 'Your on-time completion rate of 92% exceeds the 85% target. Excellent work!' });
+
+  alertsEl.innerHTML = alerts.map(a => `
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:10px;background:${
+      a.type==='warn' ? '#FFFBEB' : a.type==='success' ? 'var(--green-soft)' : 'var(--blue-light)'
+    };border:1px solid ${a.type==='warn' ? '#FDE68A' : a.type==='success' ? 'var(--green-mid)' : '#BFDBFE'}">
+      <span style="font-size:16px">${a.type==='warn' ? '⚠️' : a.type==='success' ? '✅' : 'ℹ️'}</span>
+      <span style="font-size:13px;color:var(--text-700)">${a.msg}</span>
+    </div>
+  `).join('');
+}
+
+// ---- NAVIGATION ----
+function showTab(tab, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (el) el.classList.add('active');
+  const titles = { today:'My Assignments', performance:'Performance', history:'Completed Collections' };
+  document.getElementById('pageTitle').textContent = titles[tab] || tab;
+}
+
+function logout() {
+  sessionStorage.removeItem('td_auth');
+  window.location.href = 'login.html';
+}
+
+function contactResident(phone) {
+  showToast('Contacting resident: ' + phone, 'success');
+}
+
+// ---- HELPERS ----
+function formatDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-PK', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function badgeHtml(status) {
+  const cls = { Pending:'badge-pending', Assigned:'badge-assigned', Completed:'badge-completed', Cancelled:'badge-cancelled' };
+  const dot = { Pending:'🟡', Assigned:'🔵', Completed:'🟢', Cancelled:'🔴' };
+  return `<span class="badge ${cls[status]||''}">${dot[status]||''} ${status}</span>`;
+}
+
+function wasteIcon(type) {
+  const icons = {
+    Household: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
+    Recyclable:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>',
+    Organic:   '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/></svg>',
+    Electronic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+    Hazardous: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  };
+  return icons[type] || icons.Household;
+}
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => t.className = '', 3500);
+}
+</script>
+</body>
+</html>
