@@ -139,16 +139,19 @@ async function apiLogin(email, password, role) {
 /**
  * Register — password sent to server exactly as typed.
  */
-async function apiRegister(name, email, password, phone, address) {
-  const res = await apiFetch('/api/auth/register', {
-    method: 'POST',
-    body: JSON.stringify({ name, email, password, phone, address }),
+async function apiFetch(path, opts = {}) {
+  // Make sure API_BASE_URL is defined at the top of the file!
+  const res = await fetch(API_BASE_URL + path, {
+    headers: authHeaders(),
+    ...opts
   });
-  sessionStorage.setItem('td_token', res.token);
-  sessionStorage.setItem('td_auth', JSON.stringify({
-    role: 'resident', userId: res.user.id, email: res.user.email, name: res.user.name,
-  }));
-  return res;
+
+  const json = await res.json();
+  if (!res.ok) {
+    const msg = json.message || json.errors?.[0]?.msg || 'Error';
+    throw new Error(msg);
+  }
+  return json;
 }
 
 function apiLogout() {
