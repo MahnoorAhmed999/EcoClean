@@ -10,7 +10,7 @@
 
 //const API_BASE = 'http://localhost:3000/api';
 
-const API_BASE_URL = 'https://ecoclean-production-62c7.up.railway.app'
+const API_BASE_URL = 'ecoclean-production-62c7.up.railway.app'
 
 // This tells the app: "If I'm on Vercel, talk to Vercel. If I'm on my laptop, talk to my laptop."
 /*const API_BASE_URL = (window.location.hostname === 'localhost' || 
