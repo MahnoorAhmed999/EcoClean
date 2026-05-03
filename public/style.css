@@ -1,5 +1,5 @@
 /* ================================================================
-   TrashDash Resident Module — Shared Stylesheet
+   EcoClean Resident Module — Shared Stylesheet
    Fonts: Fraunces (display) + Plus Jakarta Sans (body)
    Primary: #16A34A
 ================================================================ */
@@ -8,12 +8,12 @@
 
 /* ---- TOKENS ------------------------------------------------- */
 :root {
-  --green:        #16A34A;
-  --green-dark:   #15803D;
-  --green-deeper: #14532D;
-  --green-light:  #DCFCE7;
-  --green-mid:    #BBF7D0;
-  --green-soft:   #F0FDF4;
+  --green:        #346739;
+  --green-dark:   #243f28;
+  --green-deeper: #162518;
+  --green-light:  #d6e8d4;
+  --green-mid:    #9FCB98;
+  --green-soft:   #eef4ec;
 
   --amber:        #F59E0B;
   --amber-light:  #FEF3C7;
@@ -31,18 +31,18 @@
 
   --bg:        #F8FBF9;
   --surface:   #FFFFFF;
-  --border:    #D1FAE5;
-  --border-md: #A7F3D0;
+  --border:    #c8ddc6;
+  --border-md: #9FCB98;
 
   --radius-sm: 8px;
   --radius:    14px;
   --radius-lg: 20px;
   --radius-xl: 28px;
 
-  --shadow-xs: 0 1px 3px rgba(22,163,74,.07);
-  --shadow-sm: 0 2px 8px rgba(22,163,74,.10);
-  --shadow:    0 4px 20px rgba(22,163,74,.12);
-  --shadow-lg: 0 12px 40px rgba(22,163,74,.16);
+  --shadow-xs: 0 1px 3px rgba(52,103,57,.07);
+  --shadow-sm: 0 2px 8px rgba(52,103,57,.10);
+  --shadow:    0 4px 20px rgba(52,103,57,.12);
+  --shadow-lg: 0 12px 40px rgba(52,103,57,.16);
 
   --sidebar-w: 260px;
 
@@ -76,7 +76,7 @@ h1, h2, h3 { font-family: 'Fraunces', serif; line-height: 1.2; color: var(--text
   white-space: nowrap;
 }
 .btn-primary { background: var(--green); color: #fff; }
-.btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(22,163,74,.35); }
+.btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(52,103,57,.35); }
 .btn-outline { background: transparent; color: var(--green); border: 2px solid var(--green); }
 .btn-outline:hover { background: var(--green-soft); }
 .btn-ghost { background: rgba(255,255,255,.15); color: #fff; border: 1.5px solid rgba(255,255,255,.3); }
@@ -105,7 +105,7 @@ h1, h2, h3 { font-family: 'Fraunces', serif; line-height: 1.2; color: var(--text
 .form-textarea { height: auto; padding: 12px 16px; resize: vertical; }
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+  box-shadow: 0 0 0 3px rgba(52,103,57,.12);
 }
 .form-input.error { border-color: var(--red); }
 .form-hint { font-size: 12px; color: var(--text-300); }
@@ -221,7 +221,7 @@ h1, h2, h3 { font-family: 'Fraunces', serif; line-height: 1.2; color: var(--text
   font-size: 13px; font-weight: 700; cursor: pointer;
   transition: all .2s; color: var(--text-500); background: none;
 }
-.role-toggle-btn.active { background: var(--green); color: #fff; box-shadow: 0 2px 8px rgba(22,163,74,.3); }
+.role-toggle-btn.active { background: var(--green); color: #fff; box-shadow: 0 2px 8px rgba(52,103,57,.3); }
 
 /* ---- STEP INDICATOR --------------------------------------- */
 .steps { display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }

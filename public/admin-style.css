@@ -2,25 +2,25 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --green:       #0d9a6a;
-  --green-dark:  #0a7d56;
-  --green-light: #e6f7f1;
-  --green-mid:   #c3edd9;
+  --green:       #346739;
+  --green-dark:  #243f28;
+  --green-light: #d6e8d4;
+  --green-mid:   #9FCB98;
   --sidebar-bg:  #0f2d22;
   --sidebar-w:   260px;
   --text-main:   #1a2e24;
   --text-soft:   #5a7a6a;
   --text-muted:  #94b3a0;
-  --bg:          #f4f9f6;
+  --bg:          #f4f7f4;
   --surface:     #ffffff;
-  --border:      #d8ede4;
+  --border:      #c8ddc6;
   --amber:       #f59e0b;
   --blue:        #3b82f6;
   --red:         #ef4444;
   --purple:      #8b5cf6;
   --radius:      12px;
-  --shadow:      0 2px 12px rgba(10,80,50,.08);
-  --shadow-lg:   0 8px 32px rgba(10,80,50,.13);
+  --shadow:      0 2px 12px rgba(52,103,57,.08);
+  --shadow-lg:   0 8px 32px rgba(52,103,57,.13);
   font-family: 'DM Sans', sans-serif;
 }
 
