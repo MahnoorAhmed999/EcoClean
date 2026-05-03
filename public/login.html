@@ -10,7 +10,20 @@
 
     .auth-left {
       flex: 1;
-      background: linear-gradient(145deg, #0F4C2A 0%, #16A34A 60%, #22c55e 100%);
+      background:
+        radial-gradient(ellipse 80% 80% at 50% 50%,
+          rgba(52,103,57,.18)  0%,
+          rgba(30,58,33,.55)  45%,
+          rgba(12,24,14,.92)  75%,
+          rgba(8,18,10,1.0)  100%
+        ),
+        linear-gradient(160deg,
+          rgba(8,20,10,.97)   0%,
+          rgba(22,42,25,.88) 30%,
+          rgba(40,76,45,.72) 60%,
+          rgba(72,120,70,.45) 85%,
+          rgba(105,160,100,.22) 100%
+        );
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 60px 48px;
       position: relative; overflow: hidden;
