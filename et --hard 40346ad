@@ -1,0 +1,22 @@
+[33mf0b7ff5[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m40346ad[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{1}: commit: update project logo ss
+[33mf0b7ff5[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{2}: commit: update project css files
+[33m0b72266[m HEAD@{3}: commit: update project frontend
+[33mc9dd087[m HEAD@{4}: commit: update project files
+[33m40d0343[m HEAD@{5}: commit: railway link retry 2
+[33m4732138[m HEAD@{6}: commit: railway link retry
+[33m6e07fc1[m HEAD@{7}: commit: fix: final syntax and routes
+[33mf48ce74[m HEAD@{8}: commit: railway link updated again pt 2
+[33md6a13db[m HEAD@{9}: commit: railway link updated again
+[33m69b0ed9[m HEAD@{10}: commit: railway link updated. now my link works on railway updating the link on api
+[33m9eca4dd[m HEAD@{11}: commit: railway 2
+[33m33cb80d[m HEAD@{12}: commit: railway 2
+[33mb622e52[m HEAD@{13}: commit: railway
+[33m25a877f[m HEAD@{14}: reset: moving to 25a877f
+[33m9a9876d[m HEAD@{15}: commit: Add smart environment switching for Vercel and local
+[33m25a877f[m HEAD@{16}: reset: moving to 25a877f
+[33m2f4f2bc[m HEAD@{17}: commit: add vercel config to route backend requests
+[33mcfecfb9[m HEAD@{18}: commit: updated the url from loal host to vercel deployed
+[33m25a877f[m HEAD@{19}: commit (initial): EcoClean backend with cloud database integration
+[33mfeaaa9e[m HEAD@{21}: commit: Complete EcoClean backend
+[33m99011c5[m HEAD@{22}: commit (initial): Working backend logic for EcoClean
