@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign In — ECO CLEAN</title>
+  <title>Sign In — EcoClean</title>
   <link rel="stylesheet" href="style.css"/>
   <style>
     body { min-height: 100vh; display: flex; align-items: stretch; }
@@ -80,10 +80,25 @@
 <div class="auth-left">
   <div class="auth-left-inner">
     <div class="auth-brand">
-      <div class="auth-brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      <div class="logo-hex">
+        <svg viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:48px;height:48px;display:block">
+          <path d="M23 2L41.5 12.5V33.5L23 44L4.5 33.5V12.5Z" fill="url(#hexGradLogin)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+          <path d="M23 10 C28 10 34 15 34 22 C34 28 28 34 23 36 C18 34 12 28 12 22 C12 15 18 10 23 10Z" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.3)" stroke-width=".8"/>
+          <line x1="23" y1="12" x2="23" y2="34" stroke="rgba(168,146,74,.7)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="23" y1="18" x2="28" y2="22" stroke="rgba(168,146,74,.45)" stroke-width=".9" stroke-linecap="round"/>
+          <line x1="23" y1="18" x2="18" y2="22" stroke="rgba(168,146,74,.45)" stroke-width=".9" stroke-linecap="round"/>
+          <line x1="23" y1="24" x2="27" y2="27" stroke="rgba(168,146,74,.35)" stroke-width=".8" stroke-linecap="round"/>
+          <line x1="23" y1="24" x2="19" y2="27" stroke="rgba(168,146,74,.35)" stroke-width=".8" stroke-linecap="round"/>
+          <path d="M19 37 Q23 39 27 37" stroke="rgba(255,255,255,.4)" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="hexGradLogin" x1="4" y1="2" x2="42" y2="44" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#243f28"/>
+              <stop offset="100%" stop-color="#346739"/>
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
-      <span class="auth-brand-name">ECO CLEAN</span>
+      <span class="auth-brand-name">EcoClean</span>
     </div>
     <h2>Welcome back to a cleaner Rawalpindi</h2>
     <p>Sign in to manage your waste pickups, track your history, and see your environmental impact.</p>
@@ -107,12 +122,12 @@
     </div>
 
     <!-- Demo Box -->
-<!--
+
     <div class="demo-box anim-3">
       <div class="demo-box-title">✨ Demo Credentials</div>
       <div class="demo-cred"><strong>Admin:</strong> admin@waste.pk / admin123 <button onclick="fillAdmin()">Use</button></div>
       <div class="demo-cred"><strong>Resident:</strong> ahmed@example.com / any password <button onclick="fillResident()">Use</button></div>
-    </div>-->
+    </div>
 
     <div class="form-stack anim-4">
       <div class="form-group">
